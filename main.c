@@ -5,6 +5,7 @@
 // Purp:	Collect analog samples from P1.3 and P1.4
 //-----------------------------------------------------------------
 #include "msp430g2553.h"
+#include "ADC10.h"
 
 void initMSP430();
 
@@ -19,14 +20,14 @@ int main(void) {
 
 	IFG1=0; 													// clear interrupt flag1
 	WDTCTL = WDTPW + WDTHOLD;									// disable WDT
-
+/*
 	BCSCTL1 = CALBC1_8MHZ;										// 8MHz clock
 	DCOCTL = CALDCO_8MHZ;
-
+*/
 	P1DIR = BIT0 | BIT6;										// Set the LEDs as output
 
 	while(1) {
-
+/*
 		// Configure P1.5 to be the ADC input, left sensor
 		ADC10CTL0 = 0;											// Turn off ADC subsystem
 		ADC10CTL1 = INCH_5 | ADC10DIV_3 ;						// Channel 5, ADC10CLK/4
@@ -36,7 +37,9 @@ int main(void) {
 		ADC10CTL0 |= ADC10SC;									// Start a conversion
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleLeft = ADC10MEM;									// collect that 10-bit value
-
+		*/
+		sampleLeft = leftSensorReading();
+/*
 		// Configure P1.3 to be the ADC input, front sensor
 		ADC10CTL0 = 0;											// Turn off ADC subsystem
 		ADC10CTL1 = INCH_3 | ADC10DIV_3 ;						// Channel 3, ADC10CLK/4
@@ -46,7 +49,9 @@ int main(void) {
 		ADC10CTL0 |= ADC10SC;									// Start a conversion
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleFront = ADC10MEM;									// collect that 10-bit value
-
+		*/
+		sampleFront = frontSensorReading();
+/*
 		// Configure P1.4 to be the ADC input, right sensor
 		ADC10CTL0 = 0;											// Turn off ADC subsystem
 		ADC10CTL1 = INCH_4 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
@@ -56,6 +61,8 @@ int main(void) {
 		ADC10CTL0 |= ADC10SC;									// Start a conversion
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleRight = ADC10MEM;								// collect that 10-bit value
+		*/
+		sampleRight = rightSensorReading();
 
 		if (sampleRight > 0x0250)	P1OUT |= BIT0;
 		else if (sampleLeft > 0x0250)		P1OUT |= BIT6;
