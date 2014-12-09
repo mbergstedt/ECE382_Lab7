@@ -64,10 +64,10 @@ int main(void) {
 		*/
 		sampleRight = rightSensorReading();
 
-		if (sampleRight > 0x0250)	P1OUT |= BIT0;
+		if (sampleRight > 0x0250)			P1OUT |= BIT0;
 		else if (sampleLeft > 0x0250)		P1OUT |= BIT6;
-		else if (sampleFront > 0x0300)	P1OUT |= BIT0|BIT6;
-		else					P1OUT &= ~(BIT0 | BIT6);
+		else if (sampleFront > 0x0250)		P1OUT |= BIT0|BIT6;
+		else								P1OUT &= ~(BIT0 | BIT6);
 
 //		i = (i+1) & 0xF;							// This is a mod 16 increment
 	} // end infinite loop
