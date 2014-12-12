@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------
-// Name:	Coulston
-// File:	lab7.c
+// Name:	Matt Bergstedt
 // Date:	Fall 2014
-// Purp:	Collect analog samples from P1.3 and P1.4
+// Purp:	Turn on LEDs based on input on the IR sensors
+// Doc:		I used Dr. Coulstons code for an individual sensor as a base for my code
 //-----------------------------------------------------------------
 #include "msp430g2553.h"
 #include "ADC10.h"
@@ -13,9 +13,9 @@ void initMSP430();
 //----------------------------------------------------------------------
 int main(void) {
 
-	unsigned short sampleLeft;								// Just to analyze the values
-	unsigned short sampleRight;
-	unsigned short sampleFront;
+//	unsigned short sampleLeft;								// Just to analyze the values
+//	unsigned short sampleRight;
+//	unsigned short sampleFront;
 //	unsigned char i = 0;										// index into sample array
 
 	IFG1=0; 													// clear interrupt flag1
@@ -38,7 +38,7 @@ int main(void) {
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleLeft = ADC10MEM;									// collect that 10-bit value
 		*/
-		sampleLeft = leftSensorReading();
+//		sampleLeft = leftSensorReading();
 /*
 		// Configure P1.3 to be the ADC input, front sensor
 		ADC10CTL0 = 0;											// Turn off ADC subsystem
@@ -50,7 +50,7 @@ int main(void) {
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleFront = ADC10MEM;									// collect that 10-bit value
 		*/
-		sampleFront = frontSensorReading();
+//		sampleFront = frontSensorReading();
 /*
 		// Configure P1.4 to be the ADC input, right sensor
 		ADC10CTL0 = 0;											// Turn off ADC subsystem
@@ -62,11 +62,11 @@ int main(void) {
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
 		sampleRight = ADC10MEM;								// collect that 10-bit value
 		*/
-		sampleRight = rightSensorReading();
+//		sampleRight = rightSensorReading();
 
-		if (sampleRight > 0x0250)			P1OUT |= BIT0;
-		else if (sampleLeft > 0x0250)		P1OUT |= BIT6;
-		else if (sampleFront > 0x0250)		P1OUT |= BIT0|BIT6;
+		if (rightSensorReading())			P1OUT |= BIT0;
+		else if (leftSensorReading())		P1OUT |= BIT6;
+		else if (frontSensorReading())		P1OUT |= BIT0|BIT6;
 		else								P1OUT &= ~(BIT0 | BIT6);
 
 //		i = (i+1) & 0xF;							// This is a mod 16 increment
